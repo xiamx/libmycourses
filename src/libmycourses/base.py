@@ -1,5 +1,7 @@
 import user
 import requests
+import re
+import course
 from bs4 import BeautifulSoup
 
 class mycourses:
@@ -12,17 +14,22 @@ class mycourses:
 		self.__request_header = {'user-agent':self.__useragent }
 		self.session = requests.Session()
 		self.session.headers.update(self.__request_header)
+		self.__course_match_pattern = re.compile("(\w{4,6}) (\d{4}) - (\w{3,4})-(\d{3})-(\d{3}) - (.+)")
+		self.__course_id_match_pattern = re.compile("""\\\/home\\\/(\d+)""")
 	def login(self, user):
 		self.user = user
 		self.__do_login()
 	def __parse(self,source):
 		res = BeautifulSoup(source)
 		courses_containing_nodes = res.find_all("li", class_="d2l-itemlist-simple d2l-itemlist-arrow d2l-itemlist-short")
+		ids = self.__course_id_match_pattern.finditer(source)
 		for course_containing_node in courses_containing_nodes:
-			pass
-			for string in course_containing_node.stripped_strings:
-				
-				print repr(string)
+			strings = course_containing_node.stripped_strings
+			m = self.__course_match_pattern.match(strings.next())
+			if m != None:
+				c = course.course(m.group(1),m.group(2),m.group(3),m.group(4),m.group(5),m.group(6),ids.next().group(1))
+				self.user.courses.append(c)
+			
 
 	def __do_login(self):
 		# first get the index page of mycourses
