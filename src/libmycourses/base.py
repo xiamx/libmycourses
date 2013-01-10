@@ -2,6 +2,8 @@ import user
 import requests
 import re
 import course
+import os
+import pickle
 from bs4 import BeautifulSoup
 
 class mycourses:
@@ -16,9 +18,16 @@ class mycourses:
 		self.session.headers.update(self.__request_header)
 		self.__course_match_pattern = re.compile("(\w{4,6}) (\d{4}) - (\w{3,4})-(\d{3})-(\d{3}) - (.+)")
 		self.__course_id_match_pattern = re.compile("""\\\/home\\\/(\d+)""")
+		self.__datadir = os.environ['HOME']+"/.libmycourses"
+		if not os.path.exists(self.__datadir):
+			os.mkdir(self.__datadir)
 	def login(self, user):
 		self.user = user
 		self.__do_login()
+		if self.loginsuccess:
+			with open(self.__datadir+"/"+self.user.username, 'w') as f:
+				pickle.dump(self.session, f)
+			
 	def __parse(self,source):
 		res = BeautifulSoup(source)
 		courses_containing_nodes = res.find_all("li", class_="d2l-itemlist-simple d2l-itemlist-arrow d2l-itemlist-short")
@@ -32,6 +41,17 @@ class mycourses:
 			
 
 	def __do_login(self):
+		# try loading previous session
+		try:
+			with open(self.__datadir+"/"+self.user.username, 'r') as f:
+				self.session = pickle.load(f)
+		except:
+			pass
+		r = self.session.get("https://mycourses2.mcgill.ca/d2l/m/home")
+		if "Home - myCourses" in r.text:
+			self.loginsuccess = True
+			return
+
 		# first get the index page of mycourses
 		r = self.session.get(self.__mycourses_index_page)
 		# then go to shibboleth login page
