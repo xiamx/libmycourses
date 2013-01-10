@@ -8,4 +8,10 @@ class course:
 		self.name = name
 		self.cid = cid
 		pass
-	
+	def __str__(self):
+		return self.semester + " " + \
+				self.year + " - " +\
+				self.subject + "-" +\
+				self.course_number + "-" +\
+				self.section_number + " - " +\
+				self.name
