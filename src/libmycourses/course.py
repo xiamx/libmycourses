@@ -7,6 +7,18 @@ class course:
 		self.section_number = section_number
 		self.name = name
 		self.cid = cid
+		self.url['base'] = 'https://mycourses2.mcgill.ca/d2l/m'
+		self.url['content'] = self.url['base'] + \ 
+				"/le/content/"+ self.cid + \
+				"/toc/list"
+		self.url['home'] =  self.url['base'] + \
+				"/home/"+ \
+				self.cid
+		self.url['discussion'] =  self.url['base'] + \
+				"/le/" + \
+				self.cid + \
+				"/discussions/list"
+
 		pass
 	def __str__(self):
 		return self.semester + " " + \
