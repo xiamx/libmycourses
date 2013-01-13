@@ -3,6 +3,9 @@ libmycourses
 
 library for the mobile site of McGill's MyCourses (https://mycourses2.mcgill.ca), written in python. 
 
+Using libmycourses to bulk download course contents
+http://pastebin.com/1YeN8Qnw
+
 Currently implemented
 ----------------------
 
