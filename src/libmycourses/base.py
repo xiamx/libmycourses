@@ -36,7 +36,7 @@ class mycourses:
 			strings = course_containing_node.stripped_strings
 			m = self.__course_match_pattern.match(strings.next())
 			if m != None:
-				c = course.course(m.group(1),m.group(2),m.group(3),m.group(4),m.group(5),m.group(6),ids.next().group(1))
+				c = course.course(m.group(1),m.group(2),m.group(3),m.group(4),m.group(5),m.group(6),ids.next().group(1), self.session)
 				self.user.courses.append(c)
 			
 
@@ -50,6 +50,7 @@ class mycourses:
 		r = self.session.get("https://mycourses2.mcgill.ca/d2l/m/home")
 		if "Home - myCourses" in r.text:
 			self.loginsuccess = True
+			self.__parse(r.text)
 			return
 
 		# first get the index page of mycourses
