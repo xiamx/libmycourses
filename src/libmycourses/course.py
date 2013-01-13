@@ -49,16 +49,19 @@ class course:
 			for filenode in filenodes:
 				ahref = filenode.find("a")
 				url = self.url['base'] + ahref['href'].replace('\\"',"").replace("/d2l/m","")
-				name = ahref.find("span").contents
+				name = ahref.find("span").contents[0]
 				fid = re.search("/view/(\d+)", url).group(1)
 
 
 				s = self.session.get(url)
 				fileres = BeautifulSoup(s.text)
-				url = self.url['domain'] + fileres.find(name="a", class_="topiclink")["href"]
-				print url
-				file_ = content.file_(name, fid, url)
-				f.files.append(file_)
+				try:
+					url = self.url['domain'] + fileres.find(name="a", class_="topiclink")["href"]
+					file_ = content.file_(name, fid, url)
+					f.files.append(file_)
+				except:
+					pass
+				
 				
 			self.folders.append(f)
 		
