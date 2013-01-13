@@ -8,12 +8,12 @@ Currently implemented
 
 * Login
 * Basic course information retrieval
+* Course Content Retrieval (for bulk pdf download and synchronizations)         
 
 Planned features
 ----------------
 
 * Discussion Board Operations (read and post)
-* Course Content Retrieval (for bulk pdf download and synchronizations)
 * Assignment Information Retrieval (Get notification on assignment due date)
 
 Dependencies
